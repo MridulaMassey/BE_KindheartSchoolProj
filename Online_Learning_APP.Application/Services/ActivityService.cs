@@ -247,13 +247,14 @@ namespace Online_Learning_App.Application.Services
         public async Task<List<Activity>> GetUpcomingActivitiesForStudent(Guid studentId)
         {
             var today = DateTime.UtcNow;
+          ///  var test = await _dbContext.Students.ToListAsync();
 
-            var classGroupId = await _context.Students
+            var classGroupId = await _dbContext.Students
                 .Where(s => s.Id == studentId)
                 .Select(s => s.ClassGroupId)
             .FirstOrDefaultAsync();
 
-            var upcoming = await _context.Activities
+            var upcoming = await _dbContext.Activities
                 .Where(a => a.ClassGroupId == classGroupId && a.DueDate > today)
                 .OrderBy(a => a.DueDate)
                 .ToListAsync();
