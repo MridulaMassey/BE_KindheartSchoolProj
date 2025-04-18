@@ -12,10 +12,12 @@ namespace Online_Learning_App_Presentation.Controllers
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _activityService;
+        private readonly IClassGroupSubjectStudentActivityService _classgroupsubjectservice;
 
-        public ActivitiesController(IActivityService activityService)
+        public ActivitiesController(IActivityService activityService, IClassGroupSubjectStudentActivityService classgroupsubjectservice)
         {
             _activityService = activityService;
+            _classgroupsubjectservice = classgroupsubjectservice;
         }
 
 
@@ -47,7 +49,8 @@ namespace Online_Learning_App_Presentation.Controllers
 
         [HttpGet("activitieslist")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivities()
-      {
+      
+        {
             var activities = await _activityService.GetAllActivitiesAsync();
             return Ok(activities);
         }

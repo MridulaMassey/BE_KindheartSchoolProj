@@ -63,25 +63,32 @@ namespace Online_Learning_App_Presentation.Controllers
 
             if (student == null) return NotFound("Student not found.");
 
-            var activities = await _context.Activities
-                .Where(a => a.ClassGroupId == student.ClassGroupId)
+            //var activities = await _context.Activities
+            //    .Where(a => a.ClassGroupId == student.ClassGroupId)
+            //    .ToListAsync();
+
+           // var activitiesclassGrooupSubject = await _context.ClassGroupSubject
+           //.Where(a => a.ClassGroupId == student.ClassGroupId).Select(a=> a.ClassGroupSubjectId).FirstOrDefaultAsync();
+
+            var activitiesStudent = await _context.ClassGroupSubjectStudentActivity.Include(a=>a.Activity)
+                .Where(a => a.StudentId == student.Id)
                 .ToListAsync();
 
             var submissions = await _context.Submissions
                 .Where(s => s.StudentId == student.Id)
                 .ToListAsync();
 
-            var result = activities.Select(a =>
+            var result = activitiesStudent.Select(a =>
             {
-                var submission = submissions.FirstOrDefault(s => s.ActivityId == a.Id);
+                var submission = submissions.FirstOrDefault(s => s.ActivityId == a.ActivityId);
 
                 return new StudentActivityWithSubmissionDto
                 {
-                    ActivityId = a.Id,
-                    Title = a.Title,
-                    Description = a.Description,
-                    DueDate = a.DueDate,
-                    PdfUrl = a.PdfUrl,
+                    ActivityId = a.ActivityId,
+                    Title = a.Activity.Title,
+                    Description = a.Activity.Description,
+                    DueDate = a.Activity.DueDate,
+                    PdfUrl = a.pdfUrl,
                     IsSubmitted = submission != null,
                     SubmissionUrl = submission?.PdfUrl,
                     SubmissionDate = submission?.SubmissionDate,
