@@ -128,6 +128,7 @@ namespace Online_Learning_App.Application.Services
                         ClassGroupSubjectId = classgroupsubjectid,
                         ActivityId = activity.ActivityId, // Assuming 'activity' is defined elsewhere and has an ActivityId
                         StudentId = student.Id // Use the actual StudentId from the student object
+                      //  fee
                     };
 
                     await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivityC);

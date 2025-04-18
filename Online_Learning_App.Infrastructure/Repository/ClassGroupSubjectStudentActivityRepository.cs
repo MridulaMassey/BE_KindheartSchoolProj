@@ -23,7 +23,7 @@ namespace Online_Learning_App.Infrastructure.Repository
         }
         public async Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClassGroupSubjectActivityByIdAsync(Guid id)
         {
-            return await _dbContext.ClassGroupSubjectStudentActivity.Where(cgs => cgs.ActivityId == id).Include(a => a.Student).Include(a => a.Activity).Include(a => a.ClassGroupSubject).ThenInclude(a => a.ClassGroup).ToListAsync(); 
+            return await _dbContext.ClassGroupSubjectStudentActivity.Where(cgs => cgs.ActivityId == id).Include(a => a.Student).Include(a => a.Activity).ThenInclude(a=>a.Teacher).ThenInclude(a=>a.User).Include(a => a.ClassGroupSubject).ThenInclude(a => a.ClassGroup).ToListAsync(); 
         }
         public async Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetAllAsync()
         {

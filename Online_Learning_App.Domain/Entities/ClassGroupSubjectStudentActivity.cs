@@ -26,5 +26,8 @@ namespace Online_Learning_App.Domain.Entities
         [ForeignKey("Student")]
         public Guid StudentId { get; set; }
         public virtual Student Student { get; set; }
+
+        public string Feedback { get; set; }
+        public string pdfUrl { get; set; }
     }
 }
