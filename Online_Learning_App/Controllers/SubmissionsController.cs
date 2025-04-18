@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Online_Learning_App.Domain.Entities;
 using Online_Learning_App.Infrastructure;
 using Online_Learning_APP.Application.DTO;
+using Online_Learning_APP.Application.Interfaces;
+using static Google.Apis.Requests.BatchRequest;
 
 
 namespace Online_Learning_App_Presentation.Controllers
@@ -14,10 +17,13 @@ namespace Online_Learning_App_Presentation.Controllers
     {
        
         private readonly ApplicationDbContext _context;
+        private readonly IClassGroupSubjectStudentActivityService _classGroupActivityStudentService;
+        
 
-        public SubmissionsController(ApplicationDbContext context)
+        public SubmissionsController(ApplicationDbContext context, IClassGroupSubjectStudentActivityService classGroupActivityStudentService)
         {
             _context = context;
+            _classGroupActivityStudentService = classGroupActivityStudentService;
         }
 
         [HttpPost("submit")]
@@ -41,6 +47,11 @@ namespace Online_Learning_App_Presentation.Controllers
                 existingSubmission.StudentComment = dto.StudentComment ?? "";
 
                 _context.Submissions.Update(existingSubmission);
+                var activitySubjectRepository = new ClassGroupSubjectStudentActivity
+                {
+                    pdfUrl = dto.PdfUrl
+                };
+                _context.ClassGroupSubjectStudentActivity.Update(activitySubjectRepository);
                 await _context.SaveChangesAsync();
 
                 return Ok("You have already submitted this activity. Your submission has been updated.");
@@ -58,8 +69,10 @@ namespace Online_Learning_App_Presentation.Controllers
                 Grade = 0,
                 StudentComment = dto.StudentComment
             };
+           
 
             _context.Submissions.Add(submission);
+            
             await _context.SaveChangesAsync();
 
             return Ok("Activity submitted successfully.");
@@ -88,7 +101,11 @@ namespace Online_Learning_App_Presentation.Controllers
             submission.StudentComment = dto.StudentComment;
 
             _context.Submissions.Update(submission);
-            await _context.SaveChangesAsync();
+          var test=await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
+            test.pdfUrl=dto.PdfUrl;
+            _context.ClassGroupSubjectStudentActivity.Update(test);
+          //  await _classGroupActivityStudentService.UpdateSubjectAsync(test); ;
+             await _context.SaveChangesAsync();
 
             return Ok("Resubmission successful.");
         }
