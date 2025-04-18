@@ -83,9 +83,8 @@ namespace Online_Learning_App.Application.Services
             activity.ClassGroupSubjectId = classgroupsubjectid;
             var classgrpactivity = Guid.NewGuid();
             //await _classGroupSubjectRepository.AddAsync(classGroupSubject);
-            activity.TeacherId = Guid.Parse("970BC8A3-3D96-4B94-7DFC-08DD7B6783E6");
-            await _activityRepository.AddAsync(activity);
-            return _mapper.Map<ActivityDto>(activity);
+            activity.TeacherId = Guid.Parse("F7400196-CDEB-49ED-11BA-08DD64CD7D35");
+      
 
             var classGroupSubjectActivity = new ClassGroupSubjectActivity
             {
@@ -96,7 +95,7 @@ namespace Online_Learning_App.Application.Services
             //   var classGroups = _dbContext.Students.Where(a=>a.ClassGroupId== createActivityDto.ClassGroupId);
             var allClassGroupIds = await _dbContext.Students.Where(a => a.ClassGroupId == createActivityDto.ClassGroupId)
               .Select(s => s.ClassGroupId)
-         // .Distinct()
+            // .Distinct()
             .ToListAsync();
 
             // await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
@@ -144,25 +143,25 @@ namespace Online_Learning_App.Application.Services
                 //    // StudentId =activity.StudentId.Value
                 //};
                 //await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivity);
-            
+
             }
             return _mapper.Map<ActivityDto>(activity);
         }
-    
+
 
 
         public async Task<ActivityDto> UpdateTeacherActivityAsync(UpdateTeacherSubmissionDto createActivityDto)
         {
-          
+
             var classgroupsubjectid = Guid.NewGuid();
-           
+
             var activity = await _activityRepository.GetByIdAsync(createActivityDto.ActivityId);
             var studentGuid = new Guid("845DB027-2D1D-46D5-5634-08DD65188216"); //update techer ID
             activity.Feedback = createActivityDto.Feedback;  //added merl
             activity.HasFeedback = true; //added merl
-           
 
-           var activityGrade = new ActivityGradeDto
+
+            var activityGrade = new ActivityGradeDto
             {
                 //ActivityGradeId = Guid.NewGuid(),
                 StudentId = studentGuid,
@@ -173,7 +172,7 @@ namespace Online_Learning_App.Application.Services
             {
                 //ActivityGradeId = Guid.NewGuid(),
                 StudentId = studentGuid,
-              SubjectId = activity.SubjectId
+                SubjectId = activity.SubjectId
             };
             //  var activitygradeId=_gradeService.get
             await _gradeService.AssignGradeToActivityTeacher(activityGrade);
@@ -186,10 +185,10 @@ namespace Online_Learning_App.Application.Services
             //};
 
             var activityFeedback = await _gradeService.CalculateFinalGrade(finalGrade);
-          
+
             //await _gradeService.AssignGradeToActivity(activityGradeObject);
             await _activityRepository.UpdateAsync(activity);
-         //   await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
+            //   await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
             return _mapper.Map<ActivityDto>(activity);
         }
         public async Task<ActivityDto> GetActivityByIdAsync(Guid activityId)
@@ -247,7 +246,7 @@ namespace Online_Learning_App.Application.Services
         public async Task<List<Activity>> GetUpcomingActivitiesForStudent(Guid studentId)
         {
             var today = DateTime.UtcNow;
-          ///  var test = await _dbContext.Students.ToListAsync();
+            ///  var test = await _dbContext.Students.ToListAsync();
 
             var classGroupId = await _dbContext.Students
                 .Where(s => s.Id == studentId)
