@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_APP.Application.DTO
 {
-    public class UpdateClassGroupSubjectStudentActivityDto
+    public class GetClassGroupSubStudActivityDto
     {
+
         public Guid ActivityId { get; set; }
 
         public Guid StudentId { get; set; }
-        public string FileBase64 { get; set; }
-        public string FileName { get; set; }
     }
 }

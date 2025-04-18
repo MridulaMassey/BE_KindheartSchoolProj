@@ -72,7 +72,10 @@ namespace Online_Learning_App_Presentation.Controllers
            
 
             _context.Submissions.Add(submission);
-            
+            var test = await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
+            test.pdfUrl = dto.PdfUrl;
+            _context.ClassGroupSubjectStudentActivity.Update(test);
+
             await _context.SaveChangesAsync();
 
             return Ok("Activity submitted successfully.");

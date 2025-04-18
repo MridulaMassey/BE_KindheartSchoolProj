@@ -39,6 +39,17 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(activity);
         }
 
+        [HttpPost("teachersubmission")]
+        public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGSubjectStudentActivityById(GetClassGroupSubStudActivityDto activityId)
+        {
+            var activity = await _service.GetClassGroupByStudentByIdAsync(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+            return Ok(activity);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClassGroupSubjectStudentActivityDto>>> GetAllClassGroupSubjectStudentActivities()
         {
@@ -47,7 +58,7 @@ namespace Online_Learning_App_Presentation.Controllers
         }
 
         [HttpPut("{activityId}")]
-        public async Task<IActionResult> UpdateClassGroupSubjectStudentActivity(UpdateClassGroupSubjectStudentActivityDto updateActivityDto)
+        public async Task<IActionResult> UpdateClassGroupSubjectStudentActivity([FromBody] UpdateClassGroupSubjectStudentActivityDto updateActivityDto)
         {
             if (!ModelState.IsValid)
             {
