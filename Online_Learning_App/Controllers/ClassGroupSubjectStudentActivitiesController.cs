@@ -47,19 +47,19 @@ namespace Online_Learning_App_Presentation.Controllers
         }
 
         [HttpPut("{activityId}")]
-        public async Task<IActionResult> UpdateClassGroupSubjectStudentActivity(Guid activityId, ClassGroupSubjectStudentActivityDto updateActivityDto)
+        public async Task<IActionResult> UpdateClassGroupSubjectStudentActivity(UpdateClassGroupSubjectStudentActivityDto updateActivityDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (activityId != updateActivityDto.ActivityId)
+            if (updateActivityDto.ActivityId != updateActivityDto.ActivityId)
             {
                 return BadRequest("Activity ID in the route does not match the ID in the request body.");
             }
 
-            var updatedActivity = await _service.UpdateSubjectAsync(activityId, updateActivityDto);
+            var updatedActivity = await _service.UpdateSubjectAsync(updateActivityDto);
             if (updatedActivity == null)
             {
                 return NotFound();

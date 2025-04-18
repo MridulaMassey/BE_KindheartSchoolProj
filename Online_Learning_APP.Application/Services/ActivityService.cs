@@ -214,8 +214,7 @@ namespace Online_Learning_App.Application.Services
                 return null;
             }
 
-            //   this for student
-            // Update properties
+          
             //activity.ActivityName = updateActivityDto.ActivityName ?? activity.ActivityName;
             //activity.Description = updateActivityDto.Description ?? activity.Description;
 

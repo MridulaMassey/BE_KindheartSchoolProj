@@ -47,19 +47,19 @@ namespace Online_Learning_APP.Application.Services
             return _mapper.Map<IEnumerable<ClassGroupSubjectStudentActivityDto>>(subject);
         }
 
-        public async Task<ClassGroupSubjectStudentActivityDto> UpdateSubjectAsync(Guid activityId, ClassGroupSubjectStudentActivityDto updateSubjectDto)
+        public async Task<ClassGroupSubjectStudentActivityDto> UpdateSubjectAsync(UpdateClassGroupSubjectStudentActivityDto updateSubjectDto)
         {
-            var subject = await _repository.GetClassGroupSubjectActivityByIdAsync(activityId);
+            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(updateSubjectDto.ActivityId, updateSubjectDto.StudentId);
             if (subject == null)
             {
                 return null;
             }
-
+            
             // Update properties
-         //   subject.ClassGroupSubjectStudentActivityId = updateSubjectDto.ActivityId;
-            //activity.Description = updateSubjectDto.Description ?? activity.Description;
+          //  subject = updateSubjectDto.ActivityId;
+         
 
-       //     await _repository.UpdateAsync(subject);
+          //  await _repository.UpdateAsync(subject);
             return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
         }
 
