@@ -89,7 +89,7 @@ namespace Online_Learning_App_Presentation.Controllers
         {
 
             var submissions = await _context.Submissions
-               .Where(s => s.IsSubmitted == true)
+               .Where(s => s.IsSubmitted == false)
                .ToListAsync();
 
 
