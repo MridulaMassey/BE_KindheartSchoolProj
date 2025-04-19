@@ -18,8 +18,16 @@ namespace Online_Learning_App.Infrastructure.Repository
         }
         public async Task AddAsync(ClassGroupSubjectStudentActivity classgroupSubjectStudentActivity)
         {
+            try
+            { 
             await _dbContext.ClassGroupSubjectStudentActivity.AddAsync(classgroupSubjectStudentActivity);
             await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving changes: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
         }
         public async Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClassGroupSubjectActivityByIdAsync(Guid id)
         {

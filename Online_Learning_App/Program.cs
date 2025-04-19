@@ -112,6 +112,9 @@ builder.Services.AddScoped<IClassGroupSubjectStudentActivityRepository, ClassGro
 builder.Services.AddScoped<IClassGroupSubjectStudentActivityService, ClassGroupSubjectStudentActivityService>();
 builder.Services.AddScoped<IClassGroupSubjectActivityService, ClassGroupSubjectActivityService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 
 builder.Services.AddScoped<ICertificateRepository, CertificateRepository>(); //added merl
 builder.Services.AddScoped<ICertificateService, CertificateService>(); //added merl
@@ -140,6 +143,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.MapControllers();
 app.Run();

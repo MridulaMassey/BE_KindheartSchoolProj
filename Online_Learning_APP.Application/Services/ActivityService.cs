@@ -28,9 +28,10 @@ namespace Online_Learning_App.Application.Services
         private readonly IGradeService _gradeService;
         private readonly ApplicationDbContext _dbContext;
         private readonly ApplicationDbContext _context;
-
+        private readonly INotificationService _notificationService;
         public ActivityService(IActivityRepository activityRepository, IMapper mapper, IFileUploadService uploadService, IClassGroupSubjectRepository classGroupSubjectRepository, IClassGroupSubjectActivityRepository classGroupSubjectActivityRepository, IGradeService gradeService,
-            ApplicationDbContext dbContext, IClassGroupSubjectStudentActivityRepository classgroupsubjectstudentActivityrepository)
+            ApplicationDbContext dbContext, IClassGroupSubjectStudentActivityRepository classgroupsubjectstudentActivityrepository
+            , INotificationService notificationService)
         {
             _activityRepository = activityRepository;
             _mapper = mapper;
@@ -40,6 +41,7 @@ namespace Online_Learning_App.Application.Services
             _gradeService = gradeService;
             _classgroupsubjectstudentActivityrepository = classgroupsubjectstudentActivityrepository;
             _dbContext = dbContext;
+            _notificationService = notificationService;
         }
 
         public async Task<ActivityDto> CreateActivityAsync(CreateActivityDto createActivityDto)
@@ -132,6 +134,7 @@ namespace Online_Learning_App.Application.Services
                     };
 
                     await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivityC);
+                    await _notificationService.NotifyStudentAsync(student.Id, $"New activity posted: {activity.Title}");
                 }
 
 
