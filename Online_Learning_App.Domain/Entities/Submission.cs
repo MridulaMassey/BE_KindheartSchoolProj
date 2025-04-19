@@ -27,5 +27,6 @@ namespace Online_Learning_App.Domain.Entities
         public int Grade { get; set; }
      
         public string StudentComment { get; set; }
+        public bool IsSubmitted { get; set; } = false;
     }
 }

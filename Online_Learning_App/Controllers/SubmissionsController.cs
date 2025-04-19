@@ -67,7 +67,8 @@ namespace Online_Learning_App_Presentation.Controllers
                 SubmissionDate = DateTime.UtcNow,
                 Feedback = "",
                 Grade = 0,
-                StudentComment = dto.StudentComment
+                StudentComment = dto.StudentComment,
+                IsSubmitted=true
             };
            
 
@@ -103,6 +104,7 @@ namespace Online_Learning_App_Presentation.Controllers
             submission.PdfUrl = dto.PdfUrl;
             submission.SubmissionDate = DateTime.UtcNow;
             submission.StudentComment = dto.StudentComment;
+            submission.IsSubmitted = true;
 
             _context.Submissions.Update(submission);
           var test=await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
