@@ -186,6 +186,21 @@ namespace Online_Learning_App.Application.Services
             //};
 
             var activityFeedback = await _gradeService.CalculateFinalGrade(finalGrade);
+            var existingSubmission = await _dbContext.Submissions
+       .FirstOrDefaultAsync(s => s.StudentId == createActivityDto.StudentId && s.ActivityId == createActivityDto.ActivityId);
+
+            if (existingSubmission != null)
+            {
+                //If submission exists, update it instead of creating a new one
+                //existingSubmission.PdfUrl = createActivityDto.pd ?? "";
+                existingSubmission.SubmissionDate = DateTime.UtcNow;
+                //   existingSubmission.StudentComment = dto.StudentComment ?? "";
+                existingSubmission.Grade = createActivityDto.Grade.Value;
+                existingSubmission.Feedback= createActivityDto.Feedback;
+                _dbContext.Submissions.Update(existingSubmission);
+
+
+            }
 
             var classGroupSubjectStudentActivityC = await _classgroupsubjectstudentActivityrepository.GetActivitySubjectStudentByIdAsync(createActivityDto.ActivityId, createActivityDto.StudentId);
             // classGroupSubjectStudentActivityC.
