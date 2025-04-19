@@ -29,5 +29,9 @@ namespace Online_Learning_App.Domain.Entities
 
         public string Feedback { get; set; }
         public string pdfUrl { get; set; }
+        [ForeignKey("Submission")]
+        public Guid? SubmissionId { get; set; }
+        public virtual Submission Submission { get; set; }
+
     }
 }

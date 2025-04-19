@@ -74,6 +74,7 @@ namespace Online_Learning_App_Presentation.Controllers
             _context.Submissions.Add(submission);
             var test = await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
             test.pdfUrl = dto.PdfUrl;
+            test.SubmissionId = submission.SubmissionId;
             _context.ClassGroupSubjectStudentActivity.Update(test);
 
             await _context.SaveChangesAsync();
@@ -106,6 +107,7 @@ namespace Online_Learning_App_Presentation.Controllers
             _context.Submissions.Update(submission);
           var test=await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
             test.pdfUrl=dto.PdfUrl;
+            test.SubmissionId=submission.SubmissionId;
             _context.ClassGroupSubjectStudentActivity.Update(test);
           //  await _classGroupActivityStudentService.UpdateSubjectAsync(test); ;
              await _context.SaveChangesAsync();
