@@ -83,6 +83,23 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok("Activity submitted successfully.");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> PendingSubmissions()
+        {
+
+            var submissions = await _context.Submissions
+               .Where(s => s.IsSubmitted == true)
+               .ToListAsync();
+
+
+
+
+
+            //var finalresult= result.Where(a=> a.PdfUrl==null).ToList();
+            return Ok(submissions);
+        }
+
         [HttpPut("resubmit")]
         public async Task<IActionResult> ResubmitActivity([FromBody] SubmissionDto dto)
         {
