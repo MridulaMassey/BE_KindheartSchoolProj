@@ -11,5 +11,6 @@ namespace Online_Learning_APP.Application.DTO
         public Guid ActivityId { get; set; }
         public string Feedback { get; set; }
         public double? Grade { get; set; }
+        public Guid StudentId { get; set; }
     }
 }

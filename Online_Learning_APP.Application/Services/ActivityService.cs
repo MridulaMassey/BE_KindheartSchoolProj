@@ -157,7 +157,7 @@ namespace Online_Learning_App.Application.Services
             var classgroupsubjectid = Guid.NewGuid();
 
             var activity = await _activityRepository.GetByIdAsync(createActivityDto.ActivityId);
-            var studentGuid = new Guid("845DB027-2D1D-46D5-5634-08DD65188216"); //update techer ID
+        //    var studentGuid = new Guid("845DB027-2D1D-46D5-5634-08DD65188216"); //update techer ID
             activity.Feedback = createActivityDto.Feedback;  //added merl
             activity.HasFeedback = true; //added merl
 
@@ -165,14 +165,14 @@ namespace Online_Learning_App.Application.Services
             var activityGrade = new ActivityGradeDto
             {
                 //ActivityGradeId = Guid.NewGuid(),
-                StudentId = studentGuid,
+                StudentId = createActivityDto.StudentId,
                 ActivityId = createActivityDto.ActivityId,
                 Score = createActivityDto.Grade.Value,
             };
             var finalGrade = new FinalGradeDto
             {
                 //ActivityGradeId = Guid.NewGuid(),
-                StudentId = studentGuid,
+                StudentId = createActivityDto.StudentId,
                 SubjectId = activity.SubjectId
             };
             //  var activitygradeId=_gradeService.get
@@ -187,6 +187,28 @@ namespace Online_Learning_App.Application.Services
 
             var activityFeedback = await _gradeService.CalculateFinalGrade(finalGrade);
 
+            var classGroupSubjectStudentActivityC = await _classgroupsubjectstudentActivityrepository.GetActivitySubjectStudentByIdAsync(createActivityDto.ActivityId, createActivityDto.StudentId);
+            // classGroupSubjectStudentActivityC.
+           // classGroupSubjectStudentActivityC.SubmissionId = su;
+            classGroupSubjectStudentActivityC.Feedback = createActivityDto.Feedback;
+            // classGroupSubjectStudentActivityC.Gr = createActivityDto.Feedback;
+            await _classgroupsubjectstudentActivityrepository.UpdateAsync(classGroupSubjectStudentActivityC);
+            //var submission = new Submission
+            //{
+            //    SubmissionId = Guid.NewGuid(),
+            //    ActivityId = createActivityDto.ActivityId,
+            //    StudentId = createActivityDto.StudentId,
+            //   // PdfUrl = createActivityDto.p,
+            //    SubmissionDate = DateTime.UtcNow,
+            //    Feedback = "",
+            //    Grade = createActivityDto.Grade.Value,
+            //  //  StudentComment = dto.StudentComment
+            //};
+
+
+            //_context.Submissions.Update(submission);
+          //  _context.Submissions.Add(submission);
+            //  _classgroupsubjectstudentActivityrepository.UpdateAsync()
             //await _gradeService.AssignGradeToActivity(activityGradeObject);
             await _activityRepository.UpdateAsync(activity);
             //   await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
