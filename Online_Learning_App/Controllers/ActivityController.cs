@@ -11,6 +11,7 @@ namespace Online_Learning_App_Presentation.Controllers
   
     [ApiController]
     [Route("api/activities")]
+    [Authorize(Roles = "Student,Teacher")]
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _activityService;
@@ -48,6 +49,7 @@ namespace Online_Learning_App_Presentation.Controllers
             }
             return Ok(activityDto);
         }
+
 
         [HttpGet("activitieslist")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivities()

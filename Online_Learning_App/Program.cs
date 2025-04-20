@@ -127,24 +127,15 @@ var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
+// Update your JWT configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
-        {
-            Console.WriteLine($"JWT ERROR: {context.Exception.Message}");
-            return Task.CompletedTask;
-        }
-    };
-
-    options.RequireHttpsMetadata = true;
-    options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -154,37 +145,57 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtKey)),
-        ClockSkew = TimeSpan.Zero ,// optional: reduce token expiration leeway
-            RoleClaimType = "role", // This tells it to read "role" from token
-        NameClaimType = "unique_name"
+        ClockSkew = TimeSpan.Zero,
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" // Standard role claim type
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // Allow the token to be passed in the Authorization header or as a query parameter
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ??
+                        context.Request.Query["access_token"];
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.Token = token;
+            }
+
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"JWT Authentication Failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        }
     };
 });
 
+// Configure authorization policies for roles
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireTeacherRole", policy => policy.RequireRole("Teacher"));
+    options.AddPolicy("RequireStudentRole", policy => policy.RequireRole("Student"));
+});
 
+// Update your Swagger configuration
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Learning API", Version = "v1" });
 
-    // Add JWT Auth support
+    // Configure Swagger to use JWT Authentication
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        In = ParameterLocation.Header,
-        Description = "Please enter JWT token with Bearer prefix (e.g., 'Bearer eyJ...')",
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token."
     });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-            },
-            Array.Empty<string>()
-        }
-    });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -196,10 +207,21 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            new string[] {}
         }
     });
+
+    // Optional: Include XML comments
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 });
+
+// Configure Swagger UI to display the authorize button
+//builder.Services.AddSwaggerGenNewtonsoftSupport(); // Add this if using Newtonsoft.Json
 
 
 
