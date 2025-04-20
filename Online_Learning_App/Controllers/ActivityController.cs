@@ -11,7 +11,8 @@ namespace Online_Learning_App_Presentation.Controllers
   
     [ApiController]
     [Route("api/activities")]
-    [Authorize(Roles = "Student,Teacher")]
+  //  commenting this for now but it's working and need to be done finally when Ui is completely paired
+   // [Authorize(Roles = "Student,Teacher")]
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _activityService;
