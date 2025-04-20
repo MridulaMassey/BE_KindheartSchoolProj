@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_App_Presentation.Controllers
 {
-    [Authorize(Roles = "Student")]
+  
     [ApiController]
     [Route("api/activities")]
     public class ActivitiesController : ControllerBase
@@ -51,13 +51,13 @@ namespace Online_Learning_App_Presentation.Controllers
 
         [HttpGet("activitieslist")]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivities()
-      
+
         {
             var activities = await _activityService.GetAllActivitiesAsync();
             return Ok(activities);
         }
 
-      
+
         [HttpPut("{id}")]
         public async Task<ActionResult<ActivityDto>> UpdateActivity(Guid id, [FromBody] UpdateActivityDto updateActivityDto)
         {
