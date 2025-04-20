@@ -85,8 +85,9 @@ namespace Online_Learning_App.Application.Services
             activity.ClassGroupSubjectId = classgroupsubjectid;
             var classgrpactivity = Guid.NewGuid();
             //await _classGroupSubjectRepository.AddAsync(classGroupSubject);
-            activity.TeacherId = Guid.Parse("F7400196-CDEB-49ED-11BA-08DD64CD7D35");
-      
+            activity.TeacherId = createActivityDto.TeacherId;
+
+
 
             var classGroupSubjectActivity = new ClassGroupSubjectActivity
             {
