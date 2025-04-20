@@ -21,16 +21,31 @@ namespace Online_Learning_App.Controllers
             _roleService = roleService;
         }
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginDTO model)
+        //{
+        //    var (isAuthenticated, role) = await _authService.AuthenticateUserAsync(model);
+        //    //AuthenticateTokenUserAsync
+        //    if (!isAuthenticated)
+        //    {
+        //        return Unauthorized(new { message = "Invalid credentials" ,role=role});
+        //    }
+
+        //    return Ok(new { message = "Login successful",Rolename= role });
+        //}
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            var (isAuthenticated, role) = await _authService.AuthenticateUserAsync(model);
-            if (!isAuthenticated)
+            var isAuthenticated= await _authService.AuthenticateTokenUserAsync(model);
+            //AuthenticateTokenUserAsync
+            if (!string.IsNullOrEmpty(isAuthenticated.Token)&& string.IsNullOrEmpty(isAuthenticated.Role))
             {
-                return Unauthorized(new { message = "Invalid credentials" ,role=role});
+                return Unauthorized(new { message = "Invalid credentials", role = isAuthenticated.Role });
             }
 
-            return Ok(new { message = "Login successful",Rolename= role });
+            return Ok(new { message = "Login successful", Rolename = isAuthenticated.Role,Token= isAuthenticated.Token });
         }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto dto)

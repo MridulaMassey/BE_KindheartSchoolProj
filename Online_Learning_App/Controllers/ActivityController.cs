@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Online_Learning_APP.Application.DTO;
 using Online_Learning_APP.Application.Interfaces;
 using System;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_App_Presentation.Controllers
 {
+    [Authorize(Roles = "Student")]
     [ApiController]
     [Route("api/activities")]
     public class ActivitiesController : ControllerBase

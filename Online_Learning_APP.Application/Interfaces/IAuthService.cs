@@ -11,5 +11,6 @@ namespace Online_Learning_APP.Application.Interfaces
     {
         //Task<bool> AuthenticateUserAsync(LoginDTO loginDto);
         Task<(bool IsAuthenticated, string? Role)> AuthenticateUserAsync(LoginDTO loginDto);
+        Task<TokenDTO?> AuthenticateTokenUserAsync(LoginDTO loginDto);
     }
 }
