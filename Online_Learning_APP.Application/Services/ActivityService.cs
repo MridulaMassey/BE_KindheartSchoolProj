@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper; // Assuming you're using AutoMapper
+using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 //using Online_Learning_App.Application.DTOs;
@@ -11,8 +13,10 @@ using Online_Learning_App.Infrastructure;
 using Online_Learning_App.Infrastructure.Migrations;
 using Online_Learning_App.Infrastructure.Repository;
 using Online_Learning_APP.Application.DTO;
+using Online_Learning_APP.Application.Handler;
 using Online_Learning_APP.Application.Interfaces;
 using Online_Learning_APP.Application.Services;
+
 //using Online_Learning_App.Infrastructure.Persistence.Interfaces; // Assuming a repository
 
 namespace Online_Learning_App.Application.Services
@@ -29,9 +33,10 @@ namespace Online_Learning_App.Application.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ApplicationDbContext _context;
         private readonly INotificationService _notificationService;
+        private readonly IMediator _mediator;
         public ActivityService(IActivityRepository activityRepository, IMapper mapper, IFileUploadService uploadService, IClassGroupSubjectRepository classGroupSubjectRepository, IClassGroupSubjectActivityRepository classGroupSubjectActivityRepository, IGradeService gradeService,
             ApplicationDbContext dbContext, IClassGroupSubjectStudentActivityRepository classgroupsubjectstudentActivityrepository
-            , INotificationService notificationService)
+            , INotificationService notificationService, IMediator mediator)
         {
             _activityRepository = activityRepository;
             _mapper = mapper;
@@ -42,6 +47,7 @@ namespace Online_Learning_App.Application.Services
             _classgroupsubjectstudentActivityrepository = classgroupsubjectstudentActivityrepository;
             _dbContext = dbContext;
             _notificationService = notificationService;
+            _mediator = mediator;
         }
 
         public async Task<ActivityDto> CreateActivityAsync(CreateActivityDto createActivityDto)
@@ -134,8 +140,16 @@ namespace Online_Learning_App.Application.Services
                       //  fee
                     };
 
-                    await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivityC);
-                    await _notificationService.NotifyStudentAsync(student.Id, $"New activity posted: {activity.Title}");
+                  //  await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivityC);
+                    await _mediator.Send(new CreateActivityCommand
+                    {
+                        ClassGroupSubjectStudentActivityId = classgrpactivityc,
+                        ClassGroupSubjectId = classgroupsubjectid,
+                        ActivityId = activity.ActivityId, // Assuming 'activity' is defined elsewhere and has an ActivityId
+                        StudentId = student.Id
+                    });
+
+                   // await _notificationService.NotifyStudentAsync(student.Id, $"New activity posted: {activity.Title}");
                 }
 
 
@@ -150,6 +164,10 @@ namespace Online_Learning_App.Application.Services
                 //await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivity);
 
             }
+         //   var updatedActivities = await _mediator.Send(new GetAllActivitiesQuery());
+
+        
+         //   await _hubContext.Clients.All.SendAsync("ReceiveActivitiesList", updatedActivities);
             return _mapper.Map<ActivityDto>(activity);
         }
 

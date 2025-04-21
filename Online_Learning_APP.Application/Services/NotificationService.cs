@@ -11,9 +11,9 @@ namespace Online_Learning_APP.Application.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IHubContext<ActivityHub> _hubContext;
 
-        public NotificationService(IHubContext<NotificationHub> hubContext)
+        public NotificationService(IHubContext<ActivityHub> hubContext)
         {
             _hubContext = hubContext;
         }

@@ -30,6 +30,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Online_Learning_APP.Application.Handler;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -222,7 +223,8 @@ builder.Services.AddSwaggerGen(c =>
 
 // Configure Swagger UI to display the authorize button
 //builder.Services.AddSwaggerGenNewtonsoftSupport(); // Add this if using Newtonsoft.Json
-
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateActivityCommand).Assembly));
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -248,8 +250,9 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapHub<ActivityHub>("/activityHub");
 });
-app.MapHub<NotificationHub>("/notificationhub");
+app.MapHub<ActivityHub>("/activityHub");
 
 app.MapControllers();
 app.Run();

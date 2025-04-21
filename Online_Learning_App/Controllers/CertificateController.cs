@@ -7,6 +7,7 @@ namespace Online_Learning_App_Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class CertificateController : ControllerBase
     {
         private readonly ICertificateService _certificateService;
