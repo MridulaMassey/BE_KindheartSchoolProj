@@ -128,5 +128,23 @@ namespace Online_Learning_APP.Application.Services
                 ClassGroupNames = classGroups.Select(cg => cg.ClassName).ToList()
             };
         }
+
+        //public async Task<List<ClassGroupSummaryDto>> GetClassGroupsByTeacherIdAsync(Guid teacherId)
+        //{
+        //    var classGroups = await _context.ClassGroups
+        //        .Include(cg => cg.Students)
+        //        .Where(cg => cg.TeacherId == teacherId)
+        //        .ToListAsync();
+
+        //    var result = classGroups.Select(g => new ClassGroupSummaryDto
+        //    {
+        //        ClassGroupId = g.ClassGroupId,
+        //        ClassName = g.ClassName,
+        //        StudentCount = g.Students?.Count ?? 0
+        //    }).ToList();
+
+        //    return result;
+        //}
+
     }
 }

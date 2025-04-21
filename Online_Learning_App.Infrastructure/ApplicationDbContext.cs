@@ -9,10 +9,10 @@ namespace Online_Learning_App.Infrastructure
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Role, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-        public DbSet<ClassGroupSubjectActivity> ClassGroupSubjectActivities { get; set; }
+         public DbSet<ClassGroupSubjectActivity> ClassGroupSubjectActivities { get; set; }
 
         public DbSet<ClassGroupSubjectStudentActivity> ClassGroupSubjectStudentActivity { get; set; }
-
+        
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<PrintableResource> PrintableResources { get; set; }
@@ -24,7 +24,7 @@ namespace Online_Learning_App.Infrastructure
         public DbSet<SubjectGrade> SubjectGrade { get; set; }
         public DbSet<Grade> Grade { get; set; }
         public DbSet<FinalGrade> FinalGrade { get; set; }
-
+        
         public DbSet<ActivityGrade> ActivityGrade { get; set; }
         public DbSet<ClassGroupSubject> ClassGroupSubject { get; set; }
         public DbSet<Certificate> Certificates { get; set; } //**NewlyAdded for Rewards
@@ -67,7 +67,7 @@ namespace Online_Learning_App.Infrastructure
                 .HasForeignKey(a => a.ClassGroupId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // **ClassGroup - Admin Relationship**
+             // **ClassGroup - Admin Relationship**
             modelBuilder.Entity<ClassGroup>()
                 .HasOne(cg => cg.Admin)
                 .WithMany(t => t.ClassGroups)
@@ -101,7 +101,7 @@ namespace Online_Learning_App.Infrastructure
                 .HasForeignKey(s => s.ActivityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Submission   - Add unique constraint cannot have double submission
+             //Submission   - Add unique constraint cannot have double submission
             modelBuilder.Entity<Submission>()
                 .HasIndex(s => new { s.StudentId, s.ActivityId })
                 .IsUnique();
@@ -113,7 +113,7 @@ namespace Online_Learning_App.Infrastructure
                 .HasForeignKey(t => t.RoleId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Student - User Relationship
+             // Student - User Relationship
             modelBuilder.Entity<Student>()
                 .HasOne(s => s.User)
                 .WithOne(u => u.Student)
@@ -134,10 +134,10 @@ namespace Online_Learning_App.Infrastructure
               .WithMany()
               .HasForeignKey(a => a.SubjectId)
               .OnDelete(DeleteBehavior.Cascade); // Ensure cascade delete is enabled
-
+            
             modelBuilder.Entity<ClassGroupSubjectGrade>()
               .HasKey(csg => new { csg.ClassGroupId, csg.SubjectId, csg.GradeId });
-
+                  
             modelBuilder.Entity<Grade>()
               .Property(g => g.MaxMarks)
               .HasPrecision(10, 2);
@@ -154,7 +154,7 @@ namespace Online_Learning_App.Infrastructure
             modelBuilder.Entity<SubjectGrade>()
                 .Property(sg => sg.MaxMarks)
                 .HasColumnType("decimal(18,2)");
-
+           
             modelBuilder.Entity<ClassGroup>()
          .Property(cg => cg.ClassName)
          .HasColumnType("nvarchar(450)") // Index column limit

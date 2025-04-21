@@ -163,6 +163,18 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(new { studentId = student.Id });
         }
 
+        [HttpGet("get-student-id-by-userID/{userId}")]
+        public async Task<IActionResult> GetStudentIdByUserId(Guid userId)
+        {
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (student == null)
+                return NotFound("Student not found for this user.");
+
+            return Ok(new { studentId = student.Id });
+        }
+
+
     }
 
 }

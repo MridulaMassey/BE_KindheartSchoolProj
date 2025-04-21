@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Online_Learning_APP.Application.Handler;
+using Online_Learning_APP.Application.Services.Online_Learning_APP.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -122,6 +123,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddScoped<ICertificateRepository, CertificateRepository>(); //added merl
 builder.Services.AddScoped<ICertificateService, CertificateService>(); //added merl
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 builder.Services.AddControllers();
 var jwtKey = builder.Configuration["Jwt:Key"];

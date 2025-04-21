@@ -18,7 +18,7 @@ namespace Online_Learning_App_Presentation.Controllers
        
         private readonly ApplicationDbContext _context;
         private readonly IClassGroupSubjectStudentActivityService _classGroupActivityStudentService;
-        
+
 
         public SubmissionsController(ApplicationDbContext context, IClassGroupSubjectStudentActivityService classGroupActivityStudentService)
         {
@@ -70,7 +70,7 @@ namespace Online_Learning_App_Presentation.Controllers
                 StudentComment = dto.StudentComment,
                 IsSubmitted=true
             };
-           
+
 
             _context.Submissions.Add(submission);
             var test = await _context.ClassGroupSubjectStudentActivity.FirstOrDefaultAsync(s => s.StudentId == dto.StudentId && s.ActivityId == dto.ActivityId);
@@ -129,7 +129,7 @@ namespace Online_Learning_App_Presentation.Controllers
             test.SubmissionId=submission.SubmissionId;
             _context.ClassGroupSubjectStudentActivity.Update(test);
           //  await _classGroupActivityStudentService.UpdateSubjectAsync(test); ;
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok("Resubmission successful.");
         }

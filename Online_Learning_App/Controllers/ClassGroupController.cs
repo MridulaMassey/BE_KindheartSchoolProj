@@ -80,5 +80,18 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(load);
         }
 
+        //[HttpGet("teacher-load/{teacherId}")]
+        //[ApiExplorerSettings(IgnoreApi = true)]
+        //public async Task<IActionResult> GetClassGroupsByTeacher(Guid teacherId)
+        //{
+        //    var classGroupDtos = await _classGroupService.GetClassGroupsByTeacherIdAsync(teacherId);
+
+        //    if (classGroupDtos == null || !classGroupDtos.Any())
+        //        return NotFound("No class groups found for this teacher.");
+
+        //    return Ok(classGroupDtos);
+        //}
+ 
+
     }
 }

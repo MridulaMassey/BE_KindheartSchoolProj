@@ -27,7 +27,7 @@ namespace Online_Learning_APP.Application.DTO
 
            // Add other mappings as needed
 
-        }
+        }
 
     }
 }
