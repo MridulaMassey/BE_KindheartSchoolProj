@@ -23,6 +23,8 @@ namespace Online_Learning_APP.Application.Services
 
         public async Task<ClassGroup> CreateClassGroupAsync(ClassGroupCreateDto classGroupDto)
         {
+            try
+            { 
             // Validate that the admin exists
             // First, find the admin using AdminId
             var admin = await _context.Admin.FindAsync(classGroupDto.AdminId);
@@ -57,6 +59,18 @@ namespace Online_Learning_APP.Application.Services
             await _context.SaveChangesAsync();
 
             return classGroup;
+        }
+
+             catch (DbUpdateException dbEx)
+    {
+                // Handle database-specific exceptions (e.g., unique constraint violations)
+                throw new Exception("A database error occurred while creating the class group.", dbEx);
+            }
+    catch (Exception ex)
+    {
+                // General error fallback
+                throw new Exception("An error occurred while creating the class group.", ex);
+            }
         }
         public async Task<List<ClassGroup>> GetAllClassGroupsAsync()
         {

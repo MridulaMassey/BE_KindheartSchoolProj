@@ -152,7 +152,16 @@ namespace Online_Learning_App.Infrastructure
             modelBuilder.Entity<SubjectGrade>()
                 .Property(sg => sg.MaxMarks)
                 .HasColumnType("decimal(18,2)");
-           
+
+            modelBuilder.Entity<ClassGroup>()
+         .Property(cg => cg.ClassName)
+         .HasColumnType("nvarchar(450)") // Index column limit
+         .UseCollation("SQL_Latin1_General_CP1_CI_AS"); // CI = Case Insensitive
+
+            modelBuilder.Entity<ClassGroup>()
+                .HasIndex(cg => cg.ClassName)
+                .IsUnique();
+
 
         }
 
