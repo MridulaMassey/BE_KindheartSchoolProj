@@ -1,5 +1,6 @@
 ﻿using AuthenticationApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Online_Learning_APP.Application.DTO;
 using Online_Learning_APP.Application.Interfaces;
 using Online_Learning_APP.Application.Services;
@@ -53,6 +54,13 @@ namespace Online_Learning_App.Controllers
             var result = await _userService.RegisterUserAsync(dto.UserName, dto.Email, dto.Password, dto.Role,dto.FirstName,dto.LastName,dto.ClassGroupId);
             return Ok(new { message = result });
         }
+        [HttpGet("test-broadcast")]
+        public async Task<IActionResult> TestBroadcast([FromServices] IHubContext<ActivityHub> hub)
+        {
+            await hub.Clients.All.SendAsync("ReceiveActivity", new { Test = "Hello from test!" });
+            return Ok("Sent");
+        }
+
 
         [HttpPost("create-role")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto dto)
