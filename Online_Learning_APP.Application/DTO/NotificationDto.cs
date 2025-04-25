@@ -9,6 +9,8 @@ namespace Online_Learning_APP.Application.DTO
     public class NotificationDto
     {
 
+        public Guid ClassGroupSubjectStudentActivityId { get; set; }
+        
         public Guid ActivityId { get; set; }
 
         public Guid StudentId { get; set; }

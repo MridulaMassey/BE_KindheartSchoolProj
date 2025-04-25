@@ -15,6 +15,7 @@ namespace Online_Learning_APP.Application.Interfaces
         Task<ClassGroupSubjectStudentActivityDto> UpdateSubjectAsync(UpdateClassGroupSubjectStudentActivityDto updateSubjectDto);
         Task<IEnumerable<NotificationDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg);
         Task<bool> DeleteSubjectAsync(Guid subjectId);
-        Task<ClassGroupSubjectStudentActivityDto> UpdateIsProcessedAsync(updateNotificationDto updateSubject);
+        //Task<ClassGroupSubjectStudentActivityDto> UpdateIsProcessedAsync(updateNotificationDto updateSubject);
+        Task<bool> UpdateIsProcessedAsync(updateNotificationDto updateSubjectDto);
     }
 }

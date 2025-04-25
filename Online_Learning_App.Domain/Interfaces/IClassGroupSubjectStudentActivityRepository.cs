@@ -22,5 +22,6 @@ namespace Online_Learning_App.Domain.Interfaces
         // Task<bool> GetClgActivityStudentByIdAsync(Guid id, Guid student);
         // Task<bool> UpdateAsync(ClassGroupSubjectStudentActivity classgroupSubjectStudentActivity);
         Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid studentID);
+        Task<bool> UpdateISProcessedAsync(ClassGroupSubjectStudentActivity classgroupSubjectStudentActivity);
     }
 }

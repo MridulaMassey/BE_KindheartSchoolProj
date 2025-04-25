@@ -104,18 +104,18 @@ namespace Online_Learning_APP.Application.Services
         /// </summary>
         /// <param name="subjectId"></param>
         /// <returns></returns>
-        public async Task<ClassGroupSubjectStudentActivityDto> UpdateIsProcessedAsync(updateNotificationDto updateSubjectDto)
+        public async Task<bool> UpdateIsProcessedAsync(updateNotificationDto updateSubjectDto)
         {
             var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(updateSubjectDto.ActivityId, updateSubjectDto.StudentId);
             if (subject == null)
             {
-                return null;
+                return false;
             }
 
             var activity = await _activityRepository.GetByIdAsync(updateSubjectDto.ActivityId);
             if (activity == null)
             {
-                return null;
+                return false;
             }
 
 
@@ -127,19 +127,20 @@ namespace Online_Learning_APP.Application.Services
             {
                 ActivityId = updateSubjectDto.ActivityId,
                 ///pdfUrl = updateSubjectDto.FileBase64,
-                ClassGroupSubjectId=new Guid( updateSubjectDto.ClassGroupSubjectClassGroupSubjectId),
-                IsProcessed = updateSubjectDto.IsProcessed.Value,
+                ClassGroupSubjectStudentActivityId= updateSubjectDto.ClassGroupSubjectStudentActivityId,
+                ClassGroupSubjectId =Guid.Parse( updateSubjectDto.ClassGroupSubjectClassGroupSubjectId),
+                IsProcessed = true,
                 StudentId = updateSubjectDto.StudentId
 
             };
 
-            await _repository.UpdateAsync(classGroupStudentSubjectRepository);
+         var result=   await _repository.UpdateISProcessedAsync(classGroupStudentSubjectRepository);
             // Update properties
             //  subject = updateSubjectDto.ActivityId;
 
-
+            return result;
             //  await _repository.UpdateAsync(subject);
-            return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
+         //   return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
         }
         public async Task<bool> DeleteSubjectAsync(Guid subjectId)
         {

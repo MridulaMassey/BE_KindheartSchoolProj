@@ -48,7 +48,8 @@ namespace Online_Learning_App_Presentation.Controllers
             {
                 return NotFound();
             }
-            return Ok(activity);
+            var activityresult = activity.Where(a=> a.IsProcessed==false);
+            return Ok(activityresult);
         }
         [HttpPost("teachersubmission")]
         public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGStudentActivityByStudId(GetClassGroupSubStudActivityDto studentId)
@@ -97,27 +98,27 @@ namespace Online_Learning_App_Presentation.Controllers
         }
 
 
-        //[HttpPost("updateisprocessed")]
-        //public async Task<IActionResult> UpdateIsProccesdStudentActivity([FromBody] updateNotificationDto updateActivityDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPost("updateisprocessed")]
+        public async Task<IActionResult> UpdateIsProccesdStudentActivity([FromBody] updateNotificationDto updateActivityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    if (updateActivityDto.ActivityId != updateActivityDto.ActivityId)
-        //    {
-        //        return BadRequest("Activity ID in the route does not match the ID in the request body.");
-        //    }
+            if (updateActivityDto.ActivityId != updateActivityDto.ActivityId)
+            {
+                return BadRequest("Activity ID in the route does not match the ID in the request body.");
+            }
 
-        //    var updatedActivity = await _service.UpdateIsProcessedAsync(updateActivityDto);
-        //    if (updatedActivity == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var updatedActivity = await _service.UpdateIsProcessedAsync(updateActivityDto);
+            if (updatedActivity == null)
+            {
+                return NotFound();
+            }
 
-        //    return NoContent(); // Successful update, returns 204 No Content
-        //}
+            return NoContent(); // Successful update, returns 204 No Content
+        }
 
         [HttpDelete("{activityId}")]
         public async Task<IActionResult> DeleteClassGroupSubjectStudentActivity(Guid activityId)
