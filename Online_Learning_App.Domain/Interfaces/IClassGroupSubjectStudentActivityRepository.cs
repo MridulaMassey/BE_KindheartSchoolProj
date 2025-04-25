@@ -17,5 +17,10 @@ namespace Online_Learning_App.Domain.Interfaces
         Task<ClassGroupSubjectStudentActivity> GetActivitySubjectStudentByIdAsync(Guid id, Guid studentID);
 
         Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClassGroupSubjectActivityStudentByIdAsync(Guid id, Guid studentID);
+        //   Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid student);
+        //  Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid studentId);
+        // Task<bool> GetClgActivityStudentByIdAsync(Guid id, Guid student);
+        // Task<bool> UpdateAsync(ClassGroupSubjectStudentActivity classgroupSubjectStudentActivity);
+        Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid studentID);
     }
 }

@@ -13,7 +13,8 @@ namespace Online_Learning_APP.Application.Interfaces
         Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetSubjectByIdAsync(Guid subjectId);
         Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetAllSubjectsAsync();
         Task<ClassGroupSubjectStudentActivityDto> UpdateSubjectAsync(UpdateClassGroupSubjectStudentActivityDto updateSubjectDto);
-        Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg);
+        Task<IEnumerable<NotificationDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg);
         Task<bool> DeleteSubjectAsync(Guid subjectId);
+        Task<ClassGroupSubjectStudentActivityDto> UpdateIsProcessedAsync(updateNotificationDto updateSubject);
     }
 }

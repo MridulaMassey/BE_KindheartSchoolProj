@@ -14,5 +14,6 @@ namespace Online_Learning_App.Domain.Interfaces
         Task<ClassGroupSubjectActivity> CreateAsync(ClassGroupSubjectActivity entity);
         Task<ClassGroupSubjectActivity> UpdateAsync(ClassGroupSubjectActivity entity);
         Task<bool> DeleteAsync(Guid id);
+      
     }
 }

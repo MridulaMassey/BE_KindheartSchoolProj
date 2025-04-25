@@ -40,12 +40,12 @@ namespace Online_Learning_APP.Application.Services
             return subject.ClassGroupSubjectStudentActivityId;
         }
 
-        public async Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
+        public async Task<IEnumerable<NotificationDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
         {
-            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(clg.ActivityId,clg.StudentId);
+            var subject = await _repository.GetClgActivityStudentByIdAsync(clg.ActivityId,clg.StudentId);
             if (subject == null)
                 return null;
-            return subject == null ? null : _mapper.Map<IEnumerable<ClassGroupSubjectStudentActivityDto>>(subject);
+            return subject == null ? null : _mapper.Map<IEnumerable<NotificationDto>>(subject);
 
         }
 
@@ -99,7 +99,48 @@ namespace Online_Learning_APP.Application.Services
             //  await _repository.UpdateAsync(subject);
             return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
         }
+        /// <summary>
+        /// update is processed flag
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
+        public async Task<ClassGroupSubjectStudentActivityDto> UpdateIsProcessedAsync(updateNotificationDto updateSubjectDto)
+        {
+            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(updateSubjectDto.ActivityId, updateSubjectDto.StudentId);
+            if (subject == null)
+            {
+                return null;
+            }
 
+            var activity = await _activityRepository.GetByIdAsync(updateSubjectDto.ActivityId);
+            if (activity == null)
+            {
+                return null;
+            }
+
+
+
+            // byte array
+            //byte[] filebytetest = Convert.FromBase64String(updateSubjectDto.FileBase64);
+            //var response = await _uploadService.UploadFileAsync(filebytetest, updateSubjectDto.FileName);
+            var classGroupStudentSubjectRepository = new ClassGroupSubjectStudentActivity
+            {
+                ActivityId = updateSubjectDto.ActivityId,
+                ///pdfUrl = updateSubjectDto.FileBase64,
+                ClassGroupSubjectId=new Guid( updateSubjectDto.ClassGroupSubjectClassGroupSubjectId),
+                IsProcessed = updateSubjectDto.IsProcessed.Value,
+                StudentId = updateSubjectDto.StudentId
+
+            };
+
+            await _repository.UpdateAsync(classGroupStudentSubjectRepository);
+            // Update properties
+            //  subject = updateSubjectDto.ActivityId;
+
+
+            //  await _repository.UpdateAsync(subject);
+            return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
+        }
         public async Task<bool> DeleteSubjectAsync(Guid subjectId)
         {
             var subject = await _repository.GetClassGroupSubjectActivityByIdAsync(subjectId);

@@ -32,6 +32,6 @@ namespace Online_Learning_App.Domain.Entities
         [ForeignKey("Submission")]
         public Guid? SubmissionId { get; set; }
         public virtual Submission Submission { get; set; }
-
+        public bool IsProcessed { get; set; }
     }
 }

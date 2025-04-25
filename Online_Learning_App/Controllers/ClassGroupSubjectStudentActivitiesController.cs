@@ -10,6 +10,7 @@ namespace Online_Learning_App_Presentation.Controllers
     public class ClassGroupSubjectStudentActivitiesController : ControllerBase
     {
         private readonly IClassGroupSubjectStudentActivityService _service;
+        //IClassGroupSubjectStudentActivityService
 
         public ClassGroupSubjectStudentActivitiesController(IClassGroupSubjectStudentActivityService service)
         {
@@ -39,10 +40,20 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(activity);
         }
 
-        [HttpPost("teachersubmission")]
-        public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGSubjectStudentActivityById(GetClassGroupSubStudActivityDto activityId)
+        [HttpPost("activitynotifications")]
+        public async Task<ActionResult<NotificationDto>> ClGSubjectStudentActivityById(GetClassGroupSubStudActivityDto activityId)
         {
             var activity = await _service.GetClassGroupByStudentByIdAsync(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+            return Ok(activity);
+        }
+        [HttpPost("teachersubmission")]
+        public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGStudentActivityByStudId(GetClassGroupSubStudActivityDto studentId)
+        {
+            var activity = await _service.GetClassGroupByStudentByIdAsync(studentId);
             if (activity == null)
             {
                 return NotFound();
@@ -56,7 +67,13 @@ namespace Online_Learning_App_Presentation.Controllers
             var activities = await _service.GetAllSubjectsAsync();
             return Ok(activities);
         }
-
+        /// <summary>
+        /// added isprocessed endpoint
+        /// UpdateIsProcessedAsync
+        /// </summary>
+        /// <param name="updateActivityDto"></param>
+        /// <returns></returns>
+        /// 
         [HttpPut("{activityId}")]
         public async Task<IActionResult> UpdateClassGroupSubjectStudentActivity([FromBody] UpdateClassGroupSubjectStudentActivityDto updateActivityDto)
         {
@@ -78,6 +95,29 @@ namespace Online_Learning_App_Presentation.Controllers
 
             return NoContent(); // Successful update, returns 204 No Content
         }
+
+
+        //[HttpPost("updateisprocessed")]
+        //public async Task<IActionResult> UpdateIsProccesdStudentActivity([FromBody] updateNotificationDto updateActivityDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    if (updateActivityDto.ActivityId != updateActivityDto.ActivityId)
+        //    {
+        //        return BadRequest("Activity ID in the route does not match the ID in the request body.");
+        //    }
+
+        //    var updatedActivity = await _service.UpdateIsProcessedAsync(updateActivityDto);
+        //    if (updatedActivity == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return NoContent(); // Successful update, returns 204 No Content
+        //}
 
         [HttpDelete("{activityId}")]
         public async Task<IActionResult> DeleteClassGroupSubjectStudentActivity(Guid activityId)

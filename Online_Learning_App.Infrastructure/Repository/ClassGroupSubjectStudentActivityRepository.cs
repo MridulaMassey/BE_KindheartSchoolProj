@@ -55,6 +55,10 @@ namespace Online_Learning_App.Infrastructure.Repository
             _dbContext.ClassGroupSubjectStudentActivity.Update(classgroupSubjectStudentActivity);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid studentID)
+        {
+            return await _dbContext.ClassGroupSubjectStudentActivity.Where(cgs => cgs.StudentId == studentID).Include(a => a.Student).Include(a => a.Activity).ThenInclude(a => a.Teacher).ThenInclude(a => a.User).Include(a => a.ClassGroupSubject).ThenInclude(a => a.ClassGroup).ToListAsync();
+        }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
