@@ -132,5 +132,138 @@ namespace Online_Learning_APP.Application.Services
 
             return true;
         }
+        //public async Task<Dictionary<Guid, double>> CalculateFinalGradesForActivityold(FinalGradeBatchDto finalGradeDto)
+        //{
+        //    // Get all student-activity mappings for the given classGroupSubject
+        //    var studentActivities = await _context.ClassGroupSubjectStudentActivity
+        //        .Where(a => a.ClassGroupSubjectId == finalGradeDto.clgSubjectId)
+        //        .ToListAsync();
+
+        //    // Group activities by student
+        //    var groupedByStudent = studentActivities
+        //        .GroupBy(sa => sa.StudentId);
+
+        //    var finalGrades = new Dictionary<Guid, double>();
+
+        //    foreach (var studentGroup in groupedByStudent)
+        //    {
+        //        var studentId = studentGroup.Key;
+
+        //        double finalScore = 0;
+
+        //        foreach (var sa in studentGroup)
+        //        {
+        //            var clggrpactivity=  _context.ClassGroupSubjectStudentActivity.Include(a=>a.Submission).FirstOrDefault(a => a.ActivityId == sa.ActivityId && a.StudentId== studentId);
+        //            var score = clggrpactivity?.Submission?.Grade==null?0: clggrpactivity?.Submission?.Grade;
+        //            if (score.Value==0 ||score < 1)
+        //            { continue; }
+        //            // Get activity
+        //            var activity = await _context.Activities.FirstOrDefaultAsync(a => a.ActivityId == sa.ActivityId);
+        //            if (activity == null) continue;
+
+        //            // Get submission
+        //            var submission = await _context.Submissions
+        //                .FirstOrDefaultAsync(s => s.StudentId == studentId && s.ActivityId == sa.ActivityId);
+
+        //            if (submission == null) continue;
+
+        //            // Calculate weighted score
+        //            finalScore += (submission.Grade * activity.WeightagePercent) / 100.0;
+        //        }
+
+        //        finalGrades[studentId] = finalScore;
+        //    }
+
+        //    return finalGrades;
+        //}
+
+
+        ///
+        //public async Task<Dictionary<Guid, double>> CalculateFinalGradesForActivity(FinalGradeBatchDto finalGradeDto)
+        //{
+        //    // Load all relevant student-activity mappings for the given classGroupSubject
+        //    var studentActivities = await _context.ClassGroupSubjectStudentActivity
+        //        .Where(a => a.ClassGroupSubjectId == finalGradeDto.clgSubjectId)
+        //        .Include(a => a.Submission) // Include related submission
+        //        .ToListAsync();
+
+        //    // Get all relevant activity definitions to use their WeightagePercent
+        //    var activityIds = studentActivities.Select(sa => sa.ActivityId).Distinct();
+        //    var activities = await _context.Activities
+        //        .Where(a => activityIds.Contains(a.ActivityId))
+        //        .ToDictionaryAsync(a => a.ActivityId);
+
+        //    // Group studentActivities by student
+        //    var groupedByStudent = studentActivities
+        //        .Where(sa => sa.Submission != null &&  sa.Submission.Grade > 0)
+        //        .GroupBy(sa => sa.StudentId);
+
+        //    var finalGrades = new Dictionary<Guid, double>();
+
+        //    foreach (var studentGroup in groupedByStudent)
+        //    {
+        //        var studentId = studentGroup.Key;
+        //        double finalScore = 0;
+
+        //        foreach (var sa in studentGroup)
+        //        {
+        //            if (activities.TryGetValue(sa.ActivityId, out var activity))
+        //            {
+        //                var grade = sa.Submission.Grade;
+        //                finalScore += (grade * activity.WeightagePercent) / 100.0;
+        //            }
+        //        }
+
+        //        finalGrades[studentId] = finalScore;
+        //    }
+
+        //    return finalGrades;
+        //}
+
+        public async Task<Dictionary<Guid, double>> CalculateFinalGradesForActivity(List<Guid> studentIds)
+        {
+            // Get all student-activity mappings for the given students (across all classGroupSubjects)
+            var studentActivities = await _context.ClassGroupSubjectStudentActivity
+                .Where(a => studentIds.Contains(a.StudentId))
+                .Include(a => a.Submission)
+                .ToListAsync();
+
+            // Get distinct activity IDs
+            var activityIds = studentActivities.Select(sa => sa.ActivityId).Distinct();
+
+            // Fetch all related activities and their weightages
+            var activities = await _context.Activities
+                .Where(a => activityIds.Contains(a.ActivityId))
+                .ToDictionaryAsync(a => a.ActivityId);
+
+            // Group by student ID
+            var groupedByStudent = studentActivities
+                .Where(sa => sa.Submission != null && sa.Submission.Grade!=0 && sa.Submission.Grade > 0)
+                .GroupBy(sa => sa.StudentId);
+
+            var finalGrades = new Dictionary<Guid, double>();
+
+            foreach (var studentGroup in groupedByStudent)
+            {
+                var studentId = studentGroup.Key;
+                double finalScore = 0;
+                double totalWeightage = 0; // 🔧 added
+
+                foreach (var sa in studentGroup)
+                {
+                    if (activities.TryGetValue(sa.ActivityId, out var activity))
+                    {
+                        finalScore += (sa.Submission.Grade * activity.WeightagePercent) / 100.0;
+                        totalWeightage += activity.WeightagePercent; // 🔧 added
+                    }
+                }
+                finalGrades[studentId] = totalWeightage > 0 ? (finalScore / totalWeightage) * 100.0 : 0;
+                // finalGrades[studentId] = finalScore;
+            }
+
+            return finalGrades;
+        }
+
+
     }
 }

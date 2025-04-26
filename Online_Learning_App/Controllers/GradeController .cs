@@ -36,5 +36,12 @@ namespace Online_Learning_App_Presentation.Controllers
             bool success = await _gradeService.ReleaseFinalGrade(finalGradeDto);
             return success ? Ok("Final grade released.") : BadRequest("Grade release failed.");
         }
+        [HttpPost("finalgradebatch")]
+        public async Task<IActionResult> FinalGradeBatch([FromBody] List<Guid> studentIds)
+        {
+            var succ = await _gradeService.CalculateFinalGradesForActivity(studentIds);
+            return Ok(succ);
+        }
+        //CalculateFinalGradesForActivity
     }
 }
