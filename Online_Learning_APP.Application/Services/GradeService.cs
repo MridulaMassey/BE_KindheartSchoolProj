@@ -69,7 +69,7 @@ namespace Online_Learning_APP.Application.Services
                 .ToList();
 
             var studentGrades = _context.ActivityGrade
-                .Where(ag => ag.StudentId == finalGradeDto.StudentId && activities.Select(a => a.ActivityId).Contains(ag.ActivityId))
+                .Where(ag => ag.StudentId == finalGradeDto.StudentId && activities.Select(a => a.ActivityId).Contains(ag.ActivityId.Value))
                 .ToList();
 
             if (!activities.Any() || !studentGrades.Any()) return 0;
@@ -98,7 +98,7 @@ namespace Online_Learning_APP.Application.Services
                 .ToList();
 
             var studentGrades = _context.ActivityGrade
-                .Where(ag => ag.StudentId == finalGradeDto.StudentId && activities.Select(a => a.ActivityId).Contains(ag.ActivityId))
+                .Where(ag => ag.StudentId == finalGradeDto.StudentId && activities.Select(a => a.ActivityId).Contains(ag.ActivityId.Value))
                 .ToList();
 
             if (!activities.Any() || !studentGrades.Any()) return 0;

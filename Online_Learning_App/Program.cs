@@ -32,6 +32,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Online_Learning_APP.Application.Handler;
 using Online_Learning_APP.Application.Services.Online_Learning_APP.Services;
+//using Online_Learning_APP.Application.Worker;
+using Online_Learning_App.Infrastructure.BackgroundWorker;
+//using Online_Learning_App.Infrastructure.Background;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -124,6 +127,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ICertificateRepository, CertificateRepository>(); //added merl
 builder.Services.AddScoped<ICertificateService, CertificateService>(); //added merl
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+
 
 builder.Services.AddControllers();
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -232,6 +236,8 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Services.AddHostedService<FinalGradeBatchWorker>();
+builder.Services.AddHttpClient();
 
 
 // Add services
