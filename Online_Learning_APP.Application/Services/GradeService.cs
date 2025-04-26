@@ -8,16 +8,18 @@ using Online_Learning_APP.Application.Interfaces;
 using Online_Learning_App.Domain.Entities;
 using Online_Learning_App.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Online_Learning_APP.Application.Services
 {
     public class GradeService : IGradeService
     {
         private readonly ApplicationDbContext _context;
-
-        public GradeService(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public GradeService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task AssignGradeToActivity(ActivityGradeDto activityGradeDto)
@@ -110,6 +112,16 @@ namespace Online_Learning_APP.Application.Services
             });
 
             return finalScore;
+        }
+        public async Task<ActivityGradeDto> GetFinalGradebyStdID(Guid studentID)
+        {
+
+
+            var activityGrade= await _context.ActivityGrade.FirstOrDefaultAsync(a=> a.StudentId== studentID);
+            var activity = _mapper.Map<ActivityGradeDto>(activityGrade);
+            await _context.SaveChangesAsync();
+
+            return activity;
         }
 
         public async Task<bool> ReleaseFinalGrade(FinalGradeDto finalGradeDto)

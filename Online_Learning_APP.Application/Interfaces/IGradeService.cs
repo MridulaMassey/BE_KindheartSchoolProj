@@ -16,6 +16,8 @@ namespace Online_Learning_APP.Application.Interfaces
         Task<double> CalculateFinalGradeForActivity(FinalGradeDto finalGradeDto);
         //Task<Dictionary<Guid, double>> CalculateFinalGradesForActivity(FinalGradeBatchDto finalGrade);
         Task<Dictionary<Guid, double>> CalculateFinalGradesForActivity(List<Guid> studentIdse);
-     
+        Task<ActivityGradeDto> GetFinalGradebyStdID(Guid studentID);
+
+
     }
 }
