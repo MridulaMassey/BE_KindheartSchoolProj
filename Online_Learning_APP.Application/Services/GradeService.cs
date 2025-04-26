@@ -22,19 +22,25 @@ namespace Online_Learning_APP.Application.Services
 
         public async Task AssignGradeToActivity(ActivityGradeDto activityGradeDto)
         {
+            var clgactivity = await _context.ClassGroupSubjectStudentActivity.Where(a => a.ActivityId == activityGradeDto.ActivityId && a.StudentId == activityGradeDto.StudentId).Include(a=>a.Submission).FirstOrDefaultAsync();
+            var score = clgactivity?.Submission?.Grade;
             var activityGrade = new ActivityGrade
             {
                 ActivityGradeId = Guid.NewGuid(),
                 StudentId = activityGradeDto.StudentId,
                 ActivityId = activityGradeDto.ActivityId,
-                Score = activityGradeDto.Score
+               Score = score.Value
             };
-
+            if(score>0)
+            { 
             await _context.ActivityGrade.AddAsync(activityGrade);
             await _context.SaveChangesAsync();
+            }
         }
         public async Task AssignGradeToActivityTeacher(ActivityGradeDto activityGradeDto)
         {
+         //   var score = _context.ClassGroupSubjectStudentActivity.FirstOrDefault(a => a.ActivityId == activityGradeDto.ActivityId && a.StudentId== activityGradeDto.StudentId)?.Submission?.Grade;
+
             var activityGrade = new ActivityGrade
             {
                 ActivityGradeId = Guid.NewGuid(),
@@ -42,7 +48,9 @@ namespace Online_Learning_APP.Application.Services
                 ActivityId = activityGradeDto.ActivityId,
                 Score = activityGradeDto.Score
             };
-            var activityId = _context.ActivityGrade.FirstOrDefault(a => a.ActivityId == activityGrade.ActivityId);
+    
+
+          var activityId = _context.ActivityGrade.FirstOrDefault(a => a.ActivityId == activityGrade.ActivityId);
             if (activityId == null)
             {
               
@@ -54,6 +62,8 @@ namespace Online_Learning_APP.Application.Services
 
         public async Task<double> CalculateFinalGrade(FinalGradeDto finalGradeDto)
         {
+            // var stdActivityStudent=_context.ClassGroupSubjectStudentActivity.Select
+
             var activities = _context.Activities
                 .Where(a => a.SubjectId == finalGradeDto.SubjectId)
                 .ToList();
@@ -67,6 +77,35 @@ namespace Online_Learning_APP.Application.Services
             double finalScore = studentGrades.Sum(ag =>
             {
                 var activity = activities.First(a => a.ActivityId == ag.ActivityId);
+                return (ag.Score * activity.WeightagePercent) / 100;
+            });
+
+            return finalScore;
+        }
+
+        public async Task<double> CalculateFinalGradeForActivity(FinalGradeDto finalGradeDto)
+        {
+            // var stdActivityStudent=_context.ClassGroupSubjectStudentActivity.Select
+            //var tactivities = _context.Activities
+            //    .Where(a => a.SubjectId == finalGradeDto.SubjectId)
+            //    .ToList();
+            //var clgsubjectID = _context.ClassGroupSubjectActivities
+            //    .Where(a => a.ActivityId == finalGradeDto.ActivityId)
+            //    .ToList();
+
+            var activities = _context.ClassGroupSubjectStudentActivity
+                .Where(a => a.ClassGroupSubjectId == finalGradeDto.clgSubjectId)
+                .ToList();
+
+            var studentGrades = _context.ActivityGrade
+                .Where(ag => ag.StudentId == finalGradeDto.StudentId && activities.Select(a => a.ActivityId).Contains(ag.ActivityId))
+                .ToList();
+
+            if (!activities.Any() || !studentGrades.Any()) return 0;
+
+            double finalScore = studentGrades.Sum(ag =>
+            {
+                var activity = _context.Activities.First(a => a.ActivityId == ag.ActivityId);
                 return (ag.Score * activity.WeightagePercent) / 100;
             });
 

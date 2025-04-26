@@ -43,7 +43,7 @@ namespace Online_Learning_App_Presentation.Controllers
         [HttpPost("activitynotifications")]
         public async Task<ActionResult<NotificationDto>> ClGSubjectStudentActivityById(GetClassGroupSubStudActivityDto activityId)
         {
-            var activity = await _service.GetClassGroupByStudentByIdAsync(activityId);
+            var activity = await _service.GetNotificationClgByStudentByIdAsync(activityId);
             if (activity == null)
             {
                 return NotFound();
@@ -52,9 +52,9 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(activityresult);
         }
         [HttpPost("teachersubmission")]
-        public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGStudentActivityByStudId(GetClassGroupSubStudActivityDto studentId)
+        public async Task<ActionResult<ClassGroupSubjectStudentActivityDto>> ClGStudentActivityByStudId(GetClassGroupSubStudActivityDto activityId)
         {
-            var activity = await _service.GetClassGroupByStudentByIdAsync(studentId);
+            var activity = await _service.GetClassGroupByStudentByIdAsync(activityId);
             if (activity == null)
             {
                 return NotFound();

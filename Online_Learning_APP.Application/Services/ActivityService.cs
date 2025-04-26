@@ -207,7 +207,7 @@ namespace Online_Learning_App.Application.Services
             //    Score = createActivityDto.Grade.Value
             //};
 
-            var activityFeedback = await _gradeService.CalculateFinalGrade(finalGrade);
+           var activityFeedback = await _gradeService.CalculateFinalGrade(finalGrade);
             var existingSubmission = await _dbContext.Submissions
        .FirstOrDefaultAsync(s => s.StudentId == createActivityDto.StudentId && s.ActivityId == createActivityDto.ActivityId);
 

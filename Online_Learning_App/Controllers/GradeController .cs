@@ -26,7 +26,7 @@ namespace Online_Learning_App_Presentation.Controllers
         [HttpPost("calculate-final")]
         public async Task<IActionResult> CalculateFinalGrade([FromBody] FinalGradeDto finalGradeDto)
         {
-            double finalGrade = await _gradeService.CalculateFinalGrade(finalGradeDto);
+            double finalGrade = await _gradeService.CalculateFinalGradeForActivity(finalGradeDto);
             return Ok(new { FinalScore = finalGrade });
         }
 

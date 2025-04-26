@@ -40,7 +40,17 @@ namespace Online_Learning_APP.Application.Services
             return subject.ClassGroupSubjectStudentActivityId;
         }
 
-        public async Task<IEnumerable<NotificationDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
+        public async Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
+        {
+            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(clg.ActivityId, clg.StudentId);
+            if (subject == null)
+                return null;
+            return subject == null ? null : _mapper.Map<IEnumerable<ClassGroupSubjectStudentActivityDto>>(subject);
+
+        }
+
+
+        public async Task<IEnumerable<NotificationDto>> GetNotificationClgByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
         {
             var subject = await _repository.GetClgActivityStudentByIdAsync(clg.ActivityId,clg.StudentId);
             if (subject == null)
@@ -155,5 +165,6 @@ namespace Online_Learning_APP.Application.Services
             return true;
         }
 
+  
     }
 }
