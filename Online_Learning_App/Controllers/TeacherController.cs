@@ -25,10 +25,10 @@ namespace Online_Learning_App_Presentation.Controllers
         public async Task<IActionResult> GetTeacherIdByUsername(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
-            if (user == null) 
+            if (user == null)
                 return NotFound("User Not Found");
 
-            var teacher = await _context.Teachers.FirstOrDefaultAsync( t => t.UserId == user.Id);
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.UserId == user.Id);
             if (teacher == null)
                 return NotFound("Teacher Not Found");
 
@@ -47,5 +47,5 @@ namespace Online_Learning_App_Presentation.Controllers
             return Ok(data);
         }
 
-     }
+    }
 }

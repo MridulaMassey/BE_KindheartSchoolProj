@@ -173,8 +173,6 @@ namespace Online_Learning_App_Presentation.Controllers
 
             return Ok(new { studentId = student.Id });
         }
-
-
     }
 
 }

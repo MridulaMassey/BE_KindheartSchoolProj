@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_APP.Application.DTO
 {
-    public class FinalGradeDto
+    public class FinalGradeBatchDto
     {
-        public Guid StudentId { get; set; }
-        public Guid SubjectId { get; set; }
-        public Guid? ActivityId { get; set; }
         public Guid? clgSubjectId { get; set; }
     }
 }

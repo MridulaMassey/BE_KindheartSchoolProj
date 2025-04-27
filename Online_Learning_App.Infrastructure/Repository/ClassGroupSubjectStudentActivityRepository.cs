@@ -55,6 +55,49 @@ namespace Online_Learning_App.Infrastructure.Repository
             _dbContext.ClassGroupSubjectStudentActivity.Update(classgroupSubjectStudentActivity);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task<bool> UpdateISProcessedAsync(ClassGroupSubjectStudentActivity classgroupSubjectStudentActivity)
+        {
+            try
+            {
+                var existingEntity = await _dbContext.ClassGroupSubjectStudentActivity
+         .FirstOrDefaultAsync(x =>
+             x.ActivityId == classgroupSubjectStudentActivity.ActivityId &&
+             x.StudentId == classgroupSubjectStudentActivity.StudentId &&
+             x.ClassGroupSubjectStudentActivityId == classgroupSubjectStudentActivity.ClassGroupSubjectStudentActivityId);
+
+                if (existingEntity == null)
+                {
+                    Console.WriteLine("Entity not found for the given keys.");
+                    return false;
+                }
+                existingEntity.IsProcessed = classgroupSubjectStudentActivity.IsProcessed;
+             //   _dbContext.ClassGroupSubjectStudentActivity.Update(classgroupSubjectStudentActivity);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency exception
+                Console.WriteLine("Concurrency exception: " + ex.Message);
+                return false;
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle database update exception (e.g., constraint violations)
+                Console.WriteLine("Database update exception: " + ex.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Handle any other exceptions
+                Console.WriteLine("Unexpected error during update: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<IEnumerable<ClassGroupSubjectStudentActivity>> GetClgActivityStudentByIdAsync(Guid id, Guid studentID)
+        {
+            return await _dbContext.ClassGroupSubjectStudentActivity.Where(cgs => cgs.StudentId == studentID).Include(a => a.Student).Include(a => a.Activity).ThenInclude(a => a.Teacher).ThenInclude(a => a.User).Include(a => a.ClassGroupSubject).ThenInclude(a => a.ClassGroup).ToListAsync();
+        }
 
         public async Task<bool> DeleteAsync(Guid id)
         {

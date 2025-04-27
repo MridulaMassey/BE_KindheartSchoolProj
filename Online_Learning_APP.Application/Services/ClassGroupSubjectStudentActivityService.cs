@@ -42,10 +42,20 @@ namespace Online_Learning_APP.Application.Services
 
         public async Task<IEnumerable<ClassGroupSubjectStudentActivityDto>> GetClassGroupByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
         {
-            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(clg.ActivityId,clg.StudentId);
+            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(clg.ActivityId, clg.StudentId);
             if (subject == null)
                 return null;
             return subject == null ? null : _mapper.Map<IEnumerable<ClassGroupSubjectStudentActivityDto>>(subject);
+
+        }
+
+
+        public async Task<IEnumerable<NotificationDto>> GetNotificationClgByStudentByIdAsync(GetClassGroupSubStudActivityDto clg)
+        {
+            var subject = await _repository.GetClgActivityStudentByIdAsync(clg.ActivityId,clg.StudentId);
+            if (subject == null)
+                return null;
+            return subject == null ? null : _mapper.Map<IEnumerable<NotificationDto>>(subject);
 
         }
 
@@ -99,7 +109,49 @@ namespace Online_Learning_APP.Application.Services
             //  await _repository.UpdateAsync(subject);
             return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
         }
+        /// <summary>
+        /// update is processed flag
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateIsProcessedAsync(updateNotificationDto updateSubjectDto)
+        {
+            var subject = await _repository.GetClassGroupSubjectActivityStudentByIdAsync(updateSubjectDto.ActivityId, updateSubjectDto.StudentId);
+            if (subject == null)
+            {
+                return false;
+            }
 
+            var activity = await _activityRepository.GetByIdAsync(updateSubjectDto.ActivityId);
+            if (activity == null)
+            {
+                return false;
+            }
+
+
+
+            // byte array
+            //byte[] filebytetest = Convert.FromBase64String(updateSubjectDto.FileBase64);
+            //var response = await _uploadService.UploadFileAsync(filebytetest, updateSubjectDto.FileName);
+            var classGroupStudentSubjectRepository = new ClassGroupSubjectStudentActivity
+            {
+                ActivityId = updateSubjectDto.ActivityId,
+                ///pdfUrl = updateSubjectDto.FileBase64,
+                ClassGroupSubjectStudentActivityId= updateSubjectDto.ClassGroupSubjectStudentActivityId,
+                ClassGroupSubjectId =Guid.Parse( updateSubjectDto.ClassGroupSubjectClassGroupSubjectId),
+                IsProcessed = true,
+                StudentId = updateSubjectDto.StudentId
+
+            };
+
+         var result=   await _repository.UpdateISProcessedAsync(classGroupStudentSubjectRepository);
+            // Update properties
+            //  subject = updateSubjectDto.ActivityId;
+
+            return result;
+            //  await _repository.UpdateAsync(subject);
+         //   return _mapper.Map<ClassGroupSubjectStudentActivityDto>(subject);
+        }
         public async Task<bool> DeleteSubjectAsync(Guid subjectId)
         {
             var subject = await _repository.GetClassGroupSubjectActivityByIdAsync(subjectId);
@@ -113,5 +165,6 @@ namespace Online_Learning_APP.Application.Services
             return true;
         }
 
+  
     }
 }

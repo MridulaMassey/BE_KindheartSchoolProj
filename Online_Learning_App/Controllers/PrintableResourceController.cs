@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Online_Learning_App.Domain.Entities;
 using Online_Learning_App.Infrastructure;
 using Online_Learning_APP.Application.DTO;
 
@@ -8,7 +8,6 @@ namespace Online_Learning_App_Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [ApiController]
     public class PrintableResourceController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
