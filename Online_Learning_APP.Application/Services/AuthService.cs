@@ -52,6 +52,14 @@ namespace Application.Services
 
 
 
+        //    //if (!signInResult.Succeeded)
+        //    //{
+        //    //    Console.WriteLine("Sign-in failed");
+        //    //    return signInResult; // Return early if password does not match
+        //    //}
+        //    //var result = await _signInManager.PasswordSignInAsync(user, loginDto.PasswordHash, loginDto.RememberMe, false);
+        //    return signInResult.Succeeded;
+        //}
         public async Task<(bool IsAuthenticated, string? Role)> AuthenticateUserAsync(LoginDTO loginDto)
         {
             var user = await _userRepository.GetUserByUsernameAsync(loginDto.UserName);

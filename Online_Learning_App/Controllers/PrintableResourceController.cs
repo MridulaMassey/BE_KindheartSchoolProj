@@ -33,8 +33,8 @@ namespace Online_Learning_App_Presentation.Controllers
                 FileUrl = dto.FileUrl,
                 TeacherId = dto.TeacherId,
                 UploadDate = DateTime.UtcNow,
-                //   ClassGroupId = dto.ClassGroupId,
-                //  SubjectId = dto.SubjectId,
+             //   ClassGroupId = dto.ClassGroupId,
+              //  SubjectId = dto.SubjectId,
                 IsActive = true // ← Ensure resources are visible in Get endpoints
             };
 

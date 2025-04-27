@@ -22,7 +22,7 @@ namespace Online_Learning_APP.Application.DTO
         public string ActivityActivityName { get; set; }
 
         public string ClassGroupSubjectClassGroupClassName { get; set; }
-
+          
         public string ActivityTeacherUserFirstName { get; set; }
         public string ActivityTeacherUserLastName { get; set; }
 

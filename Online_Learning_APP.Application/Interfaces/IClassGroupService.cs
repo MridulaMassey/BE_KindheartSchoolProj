@@ -15,6 +15,7 @@ namespace Online_Learning_APP.Application.Interfaces
         Task<IEnumerable<StudentDto>> GetStudentsByClassGroupIdAsync(Guid classGroupId);
         Task<bool> AssignTeacherToClassGroupAsync(Guid classGroupId, Guid teacherId);
         Task<TeacherLoadDto> GetTeacherLoadAsync(Guid teacherId);
+    //    Task<List<ClassGroupSummaryDto>> GetClassGroupsByTeacherIdAsync(Guid teacherId);
 
     }
 }

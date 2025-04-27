@@ -32,7 +32,7 @@ namespace Online_Learning_APP.Application.DTO
             //   CreateMap<ClassGroupSubjectStudentActivity, ClassGroupSubjectStudentActivityDto>();
             // Add other mappings as needed
 
-        }
+        }
 
     }
 }

@@ -128,7 +128,6 @@ builder.Services.AddScoped<ICertificateRepository, CertificateRepository>(); //a
 builder.Services.AddScoped<ICertificateService, CertificateService>(); //added merl
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 
-
 builder.Services.AddControllers();
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];

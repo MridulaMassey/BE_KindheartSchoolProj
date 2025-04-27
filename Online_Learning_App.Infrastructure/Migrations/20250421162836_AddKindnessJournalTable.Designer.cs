@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Learning_App.Infrastructure;
 
@@ -11,9 +12,11 @@ using Online_Learning_App.Infrastructure;
 namespace Online_Learning_App.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250421162836_AddKindnessJournalTable")]
+    partial class AddKindnessJournalTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,10 +112,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.Property<Guid>("JournalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Emoji")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("datetime2");
@@ -240,7 +239,7 @@ namespace Online_Learning_App.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ActivityId")
+                    b.Property<Guid>("ActivityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Score")
@@ -416,8 +415,7 @@ namespace Online_Learning_App.Infrastructure.Migrations
 
                     b.Property<string>("ClassName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TeacherId")
                         .HasColumnType("uniqueidentifier");
@@ -425,9 +423,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.HasKey("ClassGroupId");
 
                     b.HasIndex("AdminId");
-
-                    b.HasIndex("ClassName")
-                        .IsUnique();
 
                     b.HasIndex("TeacherId");
 
@@ -511,20 +506,8 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.Property<Guid>("ClassGroupSubjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Feedback")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsProcessed")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("SubmissionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("pdfUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClassGroupSubjectStudentActivityId");
 
@@ -533,8 +516,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.HasIndex("ClassGroupSubjectId");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("SubmissionId");
 
                     b.ToTable("ClassGroupSubjectStudentActivity");
                 });
@@ -594,76 +575,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.HasKey("GradeId");
 
                     b.ToTable("Grade");
-                });
-
-            modelBuilder.Entity("Online_Learning_App.Domain.Entities.KindnessJournal", b =>
-                {
-                    b.Property<Guid>("JournalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Emoji")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EntryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EntryText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("JournalId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("KindnessJournals");
-                });
-
-            modelBuilder.Entity("Online_Learning_App.Domain.Entities.PrintableResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClassGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassGroupId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("PrintableResources");
                 });
 
             modelBuilder.Entity("Online_Learning_App.Domain.Entities.Role", b =>
@@ -792,9 +703,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.Property<bool>("IsReviewed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSubmitted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PdfUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -845,49 +753,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Teachers", (string)null);
-                });
-
-            modelBuilder.Entity("PrintableResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClassGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("SubjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassGroupId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("PrintableResources");
                 });
 
             modelBuilder.Entity("Activity", b =>
@@ -998,7 +863,9 @@ namespace Online_Learning_App.Infrastructure.Migrations
                 {
                     b.HasOne("Activity", "Activity")
                         .WithMany("ActivityGrades")
-                        .HasForeignKey("ActivityId");
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Online_Learning_App.Domain.Entities.Student", "Student")
                         .WithMany()
@@ -1159,17 +1026,11 @@ namespace Online_Learning_App.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Online_Learning_App.Domain.Entities.Submission", "Submission")
-                        .WithMany()
-                        .HasForeignKey("SubmissionId");
-
                     b.Navigation("Activity");
 
                     b.Navigation("ClassGroupSubject");
 
                     b.Navigation("Student");
-
-                    b.Navigation("Submission");
                 });
 
             modelBuilder.Entity("Online_Learning_App.Domain.Entities.FinalGrade", b =>
@@ -1189,40 +1050,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("Online_Learning_App.Domain.Entities.KindnessJournal", b =>
-                {
-                    b.HasOne("Online_Learning_App.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Online_Learning_App.Domain.Entities.PrintableResource", b =>
-                {
-                    b.HasOne("Online_Learning_App.Domain.Entities.ClassGroup", "ClassGroup")
-                        .WithMany()
-                        .HasForeignKey("ClassGroupId");
-
-                    b.HasOne("Online_Learning_App.Domain.Entities.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId");
-
-                    b.HasOne("Online_Learning_App.Domain.Entities.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClassGroup");
-
-                    b.Navigation("Subject");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Online_Learning_App.Domain.Entities.Student", b =>
@@ -1304,29 +1131,6 @@ namespace Online_Learning_App.Infrastructure.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PrintableResource", b =>
-                {
-                    b.HasOne("Online_Learning_App.Domain.Entities.ClassGroup", "ClassGroup")
-                        .WithMany()
-                        .HasForeignKey("ClassGroupId");
-
-                    b.HasOne("Online_Learning_App.Domain.Entities.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId");
-
-                    b.HasOne("Online_Learning_App.Domain.Entities.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClassGroup");
-
-                    b.Navigation("Subject");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Activity", b =>

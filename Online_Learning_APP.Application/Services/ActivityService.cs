@@ -104,7 +104,7 @@ namespace Online_Learning_App.Application.Services
             //   var classGroups = _dbContext.Students.Where(a=>a.ClassGroupId== createActivityDto.ClassGroupId);
             var allClassGroupIds = await _dbContext.Students.Where(a => a.ClassGroupId == createActivityDto.ClassGroupId)
               .Select(s => s.ClassGroupId)
-            // .Distinct()
+         // .Distinct()
             .ToListAsync();
 
             // await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
@@ -162,7 +162,7 @@ namespace Online_Learning_App.Application.Services
                 //    // StudentId =activity.StudentId.Value
                 //};
                 //await _classgroupsubjectstudentActivityrepository.AddAsync(classGroupSubjectStudentActivity);
-
+            
             }
          //   var updatedActivities = await _mediator.Send(new GetAllActivitiesQuery());
 
@@ -170,21 +170,21 @@ namespace Online_Learning_App.Application.Services
          //   await _hubContext.Clients.All.SendAsync("ReceiveActivitiesList", updatedActivities);
             return _mapper.Map<ActivityDto>(activity);
         }
-
+    
 
 
         public async Task<ActivityDto> UpdateTeacherActivityAsync(UpdateTeacherSubmissionDto createActivityDto)
         {
-
+          
             var classgroupsubjectid = Guid.NewGuid();
-
+           
             var activity = await _activityRepository.GetByIdAsync(createActivityDto.ActivityId);
         //    var studentGuid = new Guid("845DB027-2D1D-46D5-5634-08DD65188216"); //update techer ID
             activity.Feedback = createActivityDto.Feedback;  //added merl
             activity.HasFeedback = true; //added merl
+           
 
-
-            var activityGrade = new ActivityGradeDto
+           var activityGrade = new ActivityGradeDto
             {
                 //ActivityGradeId = Guid.NewGuid(),
                 StudentId = createActivityDto.StudentId,
@@ -195,7 +195,7 @@ namespace Online_Learning_App.Application.Services
             {
                 //ActivityGradeId = Guid.NewGuid(),
                 StudentId = createActivityDto.StudentId,
-                SubjectId = activity.SubjectId
+              SubjectId = activity.SubjectId
             };
             //  var activitygradeId=_gradeService.get
             await _gradeService.AssignGradeToActivityTeacher(activityGrade);
@@ -223,7 +223,7 @@ namespace Online_Learning_App.Application.Services
 
 
             }
-
+          
             var classGroupSubjectStudentActivityC = await _classgroupsubjectstudentActivityrepository.GetActivitySubjectStudentByIdAsync(createActivityDto.ActivityId, createActivityDto.StudentId);
             // classGroupSubjectStudentActivityC.
            // classGroupSubjectStudentActivityC.SubmissionId = su;
@@ -248,7 +248,7 @@ namespace Online_Learning_App.Application.Services
             //  _classgroupsubjectstudentActivityrepository.UpdateAsync()
             //await _gradeService.AssignGradeToActivity(activityGradeObject);
             await _activityRepository.UpdateAsync(activity);
-            //   await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
+         //   await _classGroupSubjectActivityRepository.CreateAsync(classGroupSubjectActivity);
             return _mapper.Map<ActivityDto>(activity);
         }
         public async Task<ActivityDto> GetActivityByIdAsync(Guid activityId)
