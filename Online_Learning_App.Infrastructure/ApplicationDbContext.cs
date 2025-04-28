@@ -28,7 +28,7 @@ namespace Online_Learning_App.Infrastructure
         public DbSet<ActivityGrade> ActivityGrade { get; set; }
         public DbSet<ClassGroupSubject> ClassGroupSubject { get; set; }
         public DbSet<Certificate> Certificates { get; set; } //**NewlyAdded for Rewards
-        public DbSet<KindnessJournal> KindnessJournals { get; set; } //**NewlyAdded for Student Journal
+        public DbSet<KindnessJournal> KindnessJournal { get; set; } //**NewlyAdded for Student Journal
 
 
         public DbSet<ClassGroupSubjectGrade> ClassGroupSubjectGrade { get; set; }
